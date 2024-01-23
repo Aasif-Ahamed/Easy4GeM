@@ -143,9 +143,9 @@ date_default_timezone_set('UTC');
 
                 if (in_array($fileType, $allowTypes)) {
                     if (move_uploaded_file($_FILES["itempic"]["tmp_name"], $targetFilePath)) {
-                        $insertmtdt = "INSERT INTO `masterdata`(`rectype`,`description`, `nat_heat`, `carrat`, `owner`, `buyer`, `email`, `phone`,`dataofsell`, `noofdays`, `dateofpay`, `soldvalue`, `commis`, `shareval`,`netvalue`,`picture`, `paidval`, `balancepay`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        $insertmtdt = "INSERT INTO `masterdata`(`invNo`,`rectype`,`description`, `nat_heat`, `carrat`, `owner`, `buyer`, `email`, `phone`,`dataofsell`, `noofdays`, `dateofpay`, `soldvalue`, `commis`, `shareval`,`netvalue`,`picture`, `paidval`, `balancepay`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                         $stmt = $connection->prepare($insertmtdt);
-                        $stmt->bind_param('ssssssssssssssssss', $erot, $itemdesc, $norh, $carrat, $owner, $buyer, $emailOwners, $phoneBuyer, $dos, $nod, $paymentdate, $soldval, $commislbl, $sharelbl, $netvalLbl, $fileName, $paidVal, $balancepayable);
+                        $stmt->bind_param('sssssssssssssssssss', $invoiceNo, $erot, $itemdesc, $norh, $carrat, $owner, $buyer, $emailOwners, $phoneBuyer, $dos, $nod, $paymentdate, $soldval, $commislbl, $sharelbl, $netvalLbl, $fileName, $paidVal, $balancepayable);
                         if ($stmt->execute()) {
                             header("Location:dashboardA.php");
                         } else {
@@ -893,8 +893,8 @@ date_default_timezone_set('UTC');
                         $mail->addAddress($buyeremail, $buyername);     //Add a recipient
                         $mail->addCC('hussainnotifications@gmail.com', 'Riyasath Hussain');
                         $mail->addReplyTo('hussainnotifications@gmail.com', 'Riyasath Hussain');
-                        $mail1->addAttachment($emailFileName);
-                        $mail2->addAttachment($ownerFileName);
+                        $mail->addAttachment($emailFileName);
+                        //$mail->addAttachment($ownerFileName);
                         $mail->isHTML(true);                                //Set email format to HTML
                         $mail->Subject = 'Payment Reminder';
                         $mail->Body    = 'Dear ' . $buyername . ',<br><br>
@@ -903,7 +903,7 @@ date_default_timezone_set('UTC');
                     Your prompt attention to this matter is appreciated. Please let us know if you have any questions.<br><br>
                     Thank You';
 
-                        //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                        /* $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
                         $mail2->isSMTP();                                            //Send using SMTP
                         $mail2->Host       = 'node236.r-usdatacenter.register.lk';                     //Set the SMTP server to send through
                         $mail2->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -912,7 +912,7 @@ date_default_timezone_set('UTC');
                         $mail2->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
                         $mail2->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-                        /* $mail2->setFrom('admin@easy4gem.com', 'Easy4Gem');
+                        $mail2->setFrom('admin@easy4gem.com', 'Easy4Gem');
                     $mail2->addAddress('hussainnotifications@gmail.com', 'Riyasath Hussain');     //Add a recipient
 
                     $mail2->addAttachment($emailFileName);
@@ -931,7 +931,7 @@ date_default_timezone_set('UTC');
                         if ($mail->send()) {
                             header('Location:dashboardA.php');
                             unlink(realpath($emailFileName));
-                            unlink(realpath($ownerFileName));
+                            //unlink(realpath($ownerFileName));
                         }
                     } catch (Exception $e) {
                         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

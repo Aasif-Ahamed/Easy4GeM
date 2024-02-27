@@ -213,12 +213,12 @@ if (isset($_POST['owner'])) {
                 <td class="service"> Rs. ' . $row['netvalue'] . '<br></td>
                 <td class="service">01</td>
                 <td class="service">' . $row['paystatus'] . '</td>
-                <td style="text-align:right;"> Rs.' . $row['soldvalue'] . '</td>
+                <td style="text-align:right;"> Rs.' . $row['netvalue'] . '</td>
             </tr>
 
             <tr>
                 <td colspan="6" class="grand total">GRAND TOTAL</td>
-                <td class="grand total"> Rs.' . $row['soldvalue'] . '</td>
+                <td class="grand total"> Rs.' . $row['netvalue'] . '</td>
             </tr>
             <tr>
             <td colspan="7" style="text-align:center;">Payment due date - ' . $row['dateofpay'] . ' (' . $row['paystatus'] . ')</td>

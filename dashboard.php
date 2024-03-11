@@ -36,11 +36,11 @@ $userid = $_SESSION['userid'];
                         <h5 class="card-title">Total Sales</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">In LKR</h6>
                         <?php
-                        $totalsale = "SELECT SUM(soldvalue) AS `TotalSaleSum` FROM `masterdata`";
+                        $totalsale = "SELECT SUM(soldvalue) AS `TotalSaleSum` FROM `masterdata` WHERE `createdUser`='$userid'";
                         $totalsaleres = mysqli_query($connection, $totalsale);
                         if ($totalsaleres->num_rows > 0) {
                             while ($totalsalesum = $totalsaleres->fetch_assoc()) {
-                                echo 'Rs. ' . $totalsalesum['TotalSaleSum'];
+                                echo 'Rs. ' . number_format($totalsalesum['TotalSaleSum'], 2);
                             }
                         }
 
@@ -56,7 +56,7 @@ $userid = $_SESSION['userid'];
                         <h5 class="card-title">Upcoming Payments</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">Payment due within 10 days</h6>
                         <?php
-                        $upcomingdue = "SELECT COUNT(id) AS payDeadLine FROM `masterdata` WHERE noofdays <='10'";
+                        $upcomingdue = "SELECT COUNT(id) AS payDeadLine FROM `masterdata` WHERE noofdays <='10' AND `createdUser`='$userid'";
                         $upcomingdueres = mysqli_query($connection, $upcomingdue);
                         if ($upcomingdueres->num_rows > 0) {
                             while ($dueresrow = $upcomingdueres->fetch_assoc()) {
@@ -83,7 +83,7 @@ $userid = $_SESSION['userid'];
                             </thead>
                             <tbody>
                                 <?php
-                                $lastthree = "SELECT buyer, dataofsell FROM masterdata ORDER BY dataofsell";
+                                $lastthree = "SELECT * FROM masterdata WHERE `createdUser`='$userid' ORDER BY `dataofsell` LIMIT 3";
                                 $lastthreeres = mysqli_query($connection, $lastthree);
                                 if ($lastthreeres->num_rows > 0) {
                                     while ($lastthreerow = $lastthreeres->fetch_assoc()) {
